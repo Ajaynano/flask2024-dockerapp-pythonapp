@@ -27,8 +27,6 @@ jobs:
             with:
                 images: ${{ env.IMG_NAME }}
                 tags: |
-                    type=ref,event=branch
-                    type=semver,pattern={{version}}
                     type=semver,pattern={{major}}.{{minor}}
 
           - name: Log in to Docker Hub
