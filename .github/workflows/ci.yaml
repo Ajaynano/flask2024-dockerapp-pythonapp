@@ -1,10 +1,11 @@
 name: Build and publish a Docker image
 on:
-    workflow_dispatch:
-      inputs:
-        version:
-          type: choice
-          options:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: choice
+        description: Versioning Major, Minor, Patch
+        options:
             - PATCH
             - MINOR
             - MAJOR
@@ -31,7 +32,7 @@ jobs:
             uses: "WyriHaximus/github-action-get-previous-tag@v1"
             env:
               GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-              
+
           - name: 'Get next minor version'
             id: semvers
             uses: "WyriHaximus/github-action-next-semvers@v1"
