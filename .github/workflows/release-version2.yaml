@@ -13,8 +13,22 @@ jobs:
       with:
         fetch-depth: '0'
 
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
       env:
-        GITHUB_TOKEN: ${{ secrets.VERSION_PAT }} # if you don't want to set write permissions use a PAT token
-        WITH_V: true
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - name: 'Get next minor version'
+      id: semvers
+      uses: "WyriHaximus/github-action-next-semvers@v1"
+      with:
+        version: ${{ steps.previoustag.outputs.tag }}
+
+    - name: Create release
+      id: create_release_id
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+         tag_name: ${{ steps.semvers.outputs.patch }}
+         release_name: Release ${{ steps.semvers.outputs.patch }}
