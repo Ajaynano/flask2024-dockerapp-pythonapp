@@ -84,6 +84,6 @@ jobs:
               context: .
               push: true
               tags: >
-                ${{ env.IMG_NAME }}:${{ steps.create_release_patch.outputs }}
-                ${{ env.IMG_NAME }}:${{ steps.create_release_minor.outputs }}
-                ${{ env.IMG_NAME }}:${{ steps.create_release_major.outputs}}
+                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.patch }}
+                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.minor }}
+                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.major }}
