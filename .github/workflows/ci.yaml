@@ -15,8 +15,8 @@ jobs:
     docker-build-push:
         name: Build & push docker image
         runs-on: ubuntu-latest
-        # env:
-        #    IMG_NAME: ajzodak/flaskwebapp2024
+        env:
+           IMG_NAME: ajzodak/flaskwebapp2024
         steps:
           - name: Checkout
             uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
             uses: "WyriHaximus/github-action-get-previous-tag@v1"
             env:
               GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-              
+
           - name: 'Get next minor version'
             id: semvers
             uses: "WyriHaximus/github-action-next-semvers@v1"
@@ -46,7 +46,7 @@ jobs:
             id: create_release_patch
             uses: actions/create-release@v1
             env:
-              GITHUB_TOKEN: ${{ secrets.VERSION_PAT }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             with:
               tag_name: ${{ steps.semvers.outputs.patch }}
               release_name: Release ${{ steps.semvers.outputs.patch }}
@@ -83,4 +83,4 @@ jobs:
             with:
               context: .
               push: true
-              tags: ${{ steps.semvers.outputs.patch }}
+              tags: '${{ env.IMG_NAME }}:${{ steps.semvers.outputs.patch }}'
