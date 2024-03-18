@@ -85,5 +85,3 @@ jobs:
               push: true
               tags: >
                 ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.patch }}
-                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.minor }}
-                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.major }}
