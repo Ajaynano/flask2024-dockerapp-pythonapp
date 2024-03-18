@@ -31,4 +31,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
          tag_name: ${{ steps.semvers.outputs.patch }}
-         release_name: Release ${{ steps.semvers.outputs.patch }}
+         release_name: Release  ${{ steps.semvers.outputs.major}}${{ steps.semvers.outputs.minor}}${{ steps.semvers.outputs.patch }}
