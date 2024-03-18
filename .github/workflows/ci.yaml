@@ -31,7 +31,7 @@ jobs:
             id: previoustag
             uses: "WyriHaximus/github-action-get-previous-tag@v1"
             env:
-              GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              GITHUB_TOKEN: "${{ secrets.VERSION_PAT }}"
 
           - name: 'Get next minor version'
             id: semvers
@@ -44,7 +44,7 @@ jobs:
             id: create_release_patch
             uses: actions/create-release@v1
             env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              GITHUB_TOKEN: ${{ secrets.VERSION_PAT }}
             with:
               tag_name: ${{ steps.semvers.outputs.patch }}
               release_name: Release ${{ steps.semvers.outputs.patch }}
