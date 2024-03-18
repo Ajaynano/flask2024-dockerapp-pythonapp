@@ -1,6 +1,14 @@
 name: Build and publish a Docker image
 on:
     workflow_dispatch:
+      inputs:
+        version:
+          type: choice
+          options:
+            - PATCH
+            - MINOR
+            - MAJOR
+          
 
 jobs:
     docker-build-push:
@@ -23,19 +31,41 @@ jobs:
             uses: "WyriHaximus/github-action-get-previous-tag@v1"
             env:
               GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              
           - name: 'Get next minor version'
             id: semvers
             uses: "WyriHaximus/github-action-next-semvers@v1"
             with:
               version: ${{ steps.previoustag.outputs.tag }}
 
-          - name: Create release
-            id: create_release_id
+          - name: Create release Patch
+            if: ${{ inputs.version == 'PATCH' }}
+            id: create_release_patch
             uses: actions/create-release@v1
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             with:
               tag_name: ${{ steps.semvers.outputs.patch }}
+              release_name: Release ${{ steps.semvers.outputs.patch }}
+
+          - name: Create release Minor
+            if: ${{ inputs.version == 'MINOR' }}
+            id: create_release_minor
+            uses: actions/create-release@v1
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              tag_name: ${{ steps.semvers.outputs.minor }}
+              release_name: Release ${{ steps.semvers.outputs.patch }}
+
+          - name: Create release Major
+            if: ${{ inputs.version == 'MAJOR' }}
+            id: create_release_major
+            uses: actions/create-release@v1
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              tag_name: ${{ steps.semvers.outputs.major }}
               release_name: Release ${{ steps.semvers.outputs.patch }}
 
           - name: Log in to Docker Hub
