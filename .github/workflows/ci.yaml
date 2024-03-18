@@ -79,9 +79,28 @@ jobs:
 
 
           - name: Build and push Docker image
+            if: ${{ inputs.version == 'PATCH' }}
             uses: docker/build-push-action@v5
             with:
               context: .
               push: true
               tags: >
                 ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.patch }}
+          
+          - name: Build and push Docker image Minor
+            if: ${{ inputs.version == 'MINOR' }}
+            uses: docker/build-push-action@v5
+            with:
+              context: .
+              push: true
+              tags: >
+                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.minor }}
+
+          - name: Build and push Docker image Major
+            if: ${{ inputs.version == 'MAJOR' }}
+            uses: docker/build-push-action@v5
+            with:
+              context: .
+              push: true
+              tags: >
+                ${{ env.IMG_NAME }}:${{ steps.semvers.outputs.major }}
