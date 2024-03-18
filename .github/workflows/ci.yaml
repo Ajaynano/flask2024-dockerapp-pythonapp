@@ -20,24 +20,26 @@ jobs:
         steps:
           - name: Checkout
             uses: actions/checkout@v4
-            
-          - name: Set up QEMU
-            uses: docker/setup-qemu-action@v1
-
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v3
-
+            with:
+              fetch-depth: '0'
+          
           - name: 'Get Previous tag'
             id: previoustag
             uses: "WyriHaximus/github-action-get-previous-tag@v1"
             env:
-              GITHUB_TOKEN: "${{ secrets.VERSION_PAT }}"
-
+              GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+              
           - name: 'Get next minor version'
             id: semvers
             uses: "WyriHaximus/github-action-next-semvers@v1"
             with:
               version: ${{ steps.previoustag.outputs.tag }}
+          
+          - name: Set up QEMU
+            uses: docker/setup-qemu-action@v1
+
+          - name: Set up Docker Buildx
+            uses: docker/setup-buildx-action@v3
 
           - name: Create release Patch
             if: ${{ inputs.version == 'PATCH' }}
